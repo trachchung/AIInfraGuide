@@ -7,7 +7,8 @@
     "start": "astro dev",
     "build": "astro check && astro build && pagefind --site dist && cp -r dist/pagefind public/pagefind",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "deploy:cf": "npm run build && wrangler pages deploy dist --project-name=infra-guide --branch=main"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.8",

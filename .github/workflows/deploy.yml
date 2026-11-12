@@ -31,6 +31,9 @@ jobs:
         run: npm ci
 
       - name: Build
+        env:
+          SITE_URL: https://caomaolufei.github.io
+          BASE_PATH: /AIInfraGuide
         run: npm run build
 
       - name: Upload artifact

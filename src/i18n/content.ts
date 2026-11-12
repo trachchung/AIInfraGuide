@@ -6,13 +6,25 @@ type Source = 'guides' | 'interview' | 'posts';
 /** A Chinese source entry with translated frontmatter and body swapped in when a translation exists. */
 export type Localized<C extends Source> = CollectionEntry<C> & { translated: boolean };
 
-// Links in articles to other pages of this site, e.g. https://caomaolufei.github.io/AIInfraGuide/cuda/...
-const SITE_LINK = /(href="(?:https:\/\/caomaolufei\.github\.io)?\/AIInfraGuide)\/(?=(?:guides|prerequisites|cuda|distributed|inference|interview|blog|about)[/#?"])/g;
+// Legacy GitHub Pages paths in article HTML, e.g. /AIInfraGuide/cuda/... or full github.io URLs.
+const LEGACY_PREFIX = /((?:src|href)=")(?:https:\/\/caomaolufei\.github\.io)?\/AIInfraGuide(?=\/)/g;
+const SITE_SECTIONS = 'guides|prerequisites|cuda|distributed|inference|interview|blog|about';
 
-/** Point site links in rendered HTML at the page's language, so readers stay in it. */
+function deployBase(): string {
+  return (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
+}
+
+/** Rewrite legacy /AIInfraGuide paths to the current base, then keep readers in `lang`. */
 function localizeLinks<E extends { rendered?: { html: string } }>(entry: E, lang: Lang): E {
-  if (lang === DEFAULT_LANG || !entry.rendered) return entry;
-  return { ...entry, rendered: { ...entry.rendered, html: entry.rendered.html.replace(SITE_LINK, `$1/${lang}/`) } };
+  if (!entry.rendered) return entry;
+  const base = deployBase();
+  let html = entry.rendered.html.replace(LEGACY_PREFIX, `$1${base}`);
+  if (lang !== DEFAULT_LANG) {
+    const escaped = base.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const re = new RegExp(`(href="${escaped})/(?=(?:${SITE_SECTIONS})[/#?"])`, 'g');
+    html = html.replace(re, `$1/${lang}/`);
+  }
+  return { ...entry, rendered: { ...entry.rendered, html } };
 }
 
 let translationsByPath: Map<string, CollectionEntry<'translations'>> | undefined;

@@ -9,9 +9,14 @@ import rehypeKatex from 'rehype-katex';
 import rehypeTableWrap from './src/utils/rehype-table-wrap.mjs';
 import rehypeReferences from './src/utils/rehype-references.mjs';
 
+// Cloudflare Pages (infra-guide.polyserver.xyz) uses root base.
+// Override for GitHub Pages: SITE_URL=https://caomaolufei.github.io BASE_PATH=/AIInfraGuide
+const site = process.env.SITE_URL || 'https://infra-guide.polyserver.xyz';
+const base = process.env.BASE_PATH || '/';
+
 export default defineConfig({
-  site: 'https://caomaolufei.github.io',
-  base: '/AIInfraGuide',
+  site,
+  base,
   integrations: [tailwind(), sitemap()],
   experimental: {
     contentLayer: true,
