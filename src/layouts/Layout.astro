@@ -8,39 +8,32 @@ import '../styles/global.css';
 import ThemeToggle from '../components/ThemeToggle.astro';
 import Search from '../components/Search.astro';
 import CopyButton from '../components/CopyButton.astro';
-import { getCollection } from 'astro:content';
+import { LOCALES, LANG_META, getLangFromUrl, localePath, switchLangPath, useTranslations } from '../i18n/ui';
 
 interface Props {
   title?: string;
   description?: string;
 }
 
-const {
-  title = 'AIInfraGuide - AI Infra全栈知识库',
-  description = '深入理解 AI Infra 的核心全栈技术：CUDA算子优化、分布式训练、推理优化、性能分析',
-} = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const meta = LANG_META[lang];
+
+const { title = t('site.title'), description = t('site.description') } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const alternates = LOCALES.map((l) => {
+  const path = switchLangPath(Astro.url, l);
+  return { lang: l, path, href: new URL(path, Astro.site).href };
+});
 
-const getPath = (path: string) => {
-  const base = import.meta.env.BASE_URL;
-  return base === '/' ? path : `${base.replace(/\/$/, '')}${path}`;
-};
-
-// 获取每个模块的第一篇文章，用于导航链接
-const allGuides = await getCollection('guides', ({ data }) => !data.draft);
-const getFirstGuideUrl = (category: string, urlPrefix: string) => {
-  const first = allGuides
-    .filter((g) => g.data.category === category)
-    .sort((a, b) => a.data.order - b.data.order)[0];
-  return first ? getPath(`${urlPrefix}/${first.id}`) : getPath('/');
-};
+const getPath = (path: string) => localePath(lang, path);
 
 const navModules = [
-  { label: '前置知识', prefix: '/prerequisites', url: getPath('/prerequisites') },
-  { label: 'CUDA编程', prefix: '/cuda', url: getPath('/cuda') },
-  { label: '推理优化 🔥', prefix: '/inference', url: getPath('/inference') },
-  { label: '分布式训练', prefix: '/distributed', url: getPath('/distributed') },
+  { label: t('nav.prerequisites'), prefix: '/prerequisites', url: getPath('/prerequisites') },
+  { label: t('nav.cuda'), prefix: '/cuda', url: getPath('/cuda') },
+  { label: t('nav.inference'), prefix: '/inference', url: getPath('/inference') },
+  { label: t('nav.distributed'), prefix: '/distributed', url: getPath('/distributed') },
 ];
 
 // 导航栏高亮：根据当前路径判断激活项
@@ -67,13 +60,15 @@ const mobileNavLinkClass = (prefix: string) =>
 ---
 
 <!doctype html>
-<html lang="zh-CN" class="scroll-smooth">
+<html lang={meta.htmlLang} class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
     <meta name="description" content={description} />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href={getPath('/favicon.svg')} />
     <link rel="canonical" href={canonicalURL} />
+    {alternates.map((a) => <link rel="alternate" hreflang={LANG_META[a.lang].htmlLang} href={a.href} />)}
+    <link rel="alternate" hreflang="x-default" href={alternates[0].href} />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
 
@@ -85,7 +80,7 @@ const mobileNavLinkClass = (prefix: string) =>
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:locale" content={meta.ogLocale} />
     <meta property="og:site_name" content="AIInfraGuide" />
 
     <!-- Twitter -->
@@ -110,7 +105,7 @@ const mobileNavLinkClass = (prefix: string) =>
   <body class="bg-[#fafafa] dark:bg-[#0a0a0a] text-gray-900 dark:text-gray-100 min-h-screen flex flex-col font-sans transition-colors duration-300">
     <!-- Skip to content (accessibility) -->
     <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-[#007aff] focus:text-white focus:rounded-lg focus:text-sm focus:font-medium">
-      跳到主要内容
+      {t('nav.skip')}
     </a>
 
     <!-- Header -->
@@ -148,7 +143,7 @@ const mobileNavLinkClass = (prefix: string) =>
               <li class="group">
                 <a href={getPath('/interview')} class={navLinkClass('/interview')}>
                   <span class="relative px-3 py-1.5 rounded-lg group-hover:bg-gray-100/70 dark:group-hover:bg-white/[0.06] transition-colors duration-200">
-                    面试宝典
+                    {t('nav.interview')}
                   </span>
                   <span class={navLinkIndicator('/interview')} />
                 </a>
@@ -156,7 +151,7 @@ const mobileNavLinkClass = (prefix: string) =>
               <li class="group">
                 <a href={getPath('/blog/update-log')} class={navLinkClass('/blog/update-log')}>
                   <span class="relative px-3 py-1.5 rounded-lg group-hover:bg-gray-100/70 dark:group-hover:bg-white/[0.06] transition-colors duration-200">
-                    更新日志
+                    {t('nav.updateLog')}
                   </span>
                   <span class={navLinkIndicator('/blog/update-log')} />
                 </a>
@@ -173,7 +168,7 @@ const mobileNavLinkClass = (prefix: string) =>
                       decoding="async"
                       class="w-5 h-5 rounded-full object-cover ring-1 ring-gray-200 dark:ring-white/15"
                     />
-                    关于
+                    {t('nav.about')}
                   </span>
                   <span class={navLinkIndicator('/about')} />
                 </a>
@@ -199,13 +194,48 @@ const mobileNavLinkClass = (prefix: string) =>
             <button
               onclick="document.dispatchEvent(new Event('open-search'))"
               class="p-2 rounded-lg hover:bg-gray-100/70 dark:hover:bg-white/[0.06] transition-colors duration-200 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white cursor-pointer"
-              aria-label="搜索"
-              title="搜索 (Cmd/Ctrl + K)"
+              aria-label={t('nav.search')}
+              title={t('nav.searchHint')}
             >
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </button>
+
+            <!-- Language -->
+            <div class="relative group/lang">
+              <button
+                class="p-2 rounded-lg hover:bg-gray-100/70 dark:hover:bg-white/[0.06] transition-colors duration-200 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white cursor-pointer flex items-center gap-1 text-xs font-medium"
+                aria-label={t('nav.language')}
+                aria-haspopup="true"
+                title={t('nav.language')}
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="m10.5 21 5.25-11.25L21 21m-9-3h7.5M3 5.621a48.474 48.474 0 0 1 6-.371m0 0c1.12 0 2.233.038 3.334.114M9 5.25V3m3.334 2.364C11.176 10.658 7.69 15.08 3 17.502m9.334-12.138c.896.061 1.785.147 2.666.257m-4.589 8.495a18.023 18.023 0 0 1-3.827-5.802" />
+                </svg>
+                <span class="hidden sm:inline uppercase">{lang}</span>
+              </button>
+              <ul class="absolute right-0 top-full pt-2 hidden group-hover/lang:block group-focus-within/lang:block z-50">
+                <li class="py-1 min-w-[140px] rounded-xl bg-white dark:bg-[#1a1a1a] border border-gray-200 dark:border-white/[0.08] shadow-xl">
+                  {alternates.map((a) => (
+                    <a
+                      href={a.path}
+                      hreflang={LANG_META[a.lang].htmlLang}
+                      lang={LANG_META[a.lang].htmlLang}
+                      aria-current={a.lang === lang ? 'true' : undefined}
+                      class:list={[
+                        'block px-4 py-2 text-sm transition-colors',
+                        a.lang === lang
+                          ? 'text-gray-900 dark:text-white font-semibold'
+                          : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/[0.04]',
+                      ]}
+                    >
+                      {LANG_META[a.lang].label}
+                    </a>
+                  ))}
+                </li>
+              </ul>
+            </div>
 
             <ThemeToggle />
 
@@ -213,7 +243,7 @@ const mobileNavLinkClass = (prefix: string) =>
             <button
               id="mobile-menu-btn"
               class="lg:hidden p-2 rounded-lg hover:bg-gray-100/70 dark:hover:bg-white/[0.06] transition-colors duration-200 cursor-pointer"
-              aria-label="菜单"
+              aria-label={t('nav.menu')}
             >
               <svg id="menu-icon" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                 <path class="menu-open" stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
@@ -237,8 +267,8 @@ const mobileNavLinkClass = (prefix: string) =>
       >
         <div class="p-6">
           <div class="flex justify-between items-center mb-2">
-            <span class="text-sm font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">导航</span>
-            <button id="mobile-menu-close" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/[0.06] transition-colors cursor-pointer" aria-label="关闭菜单">
+            <span class="text-sm font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">{t('nav.navigation')}</span>
+            <button id="mobile-menu-close" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/[0.06] transition-colors cursor-pointer" aria-label={t('nav.closeMenu')}>
               <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
               </svg>
@@ -247,7 +277,7 @@ const mobileNavLinkClass = (prefix: string) =>
 
           <!-- Mobile module section -->
           <div class="mb-6">
-            <p class="text-[11px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider px-4 mb-2">知识库</p>
+            <p class="text-[11px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider px-4 mb-2">{t('nav.knowledgeBase')}</p>
             <nav class="flex flex-col gap-0.5">
               {navModules.map((mod) => (
                 <a href={mod.url} class={mobileNavLinkClass(mod.prefix)}>{mod.label}</a>
@@ -255,14 +285,37 @@ const mobileNavLinkClass = (prefix: string) =>
             </nav>
           </div>
 
+          <!-- Mobile language section -->
+          <div class="mb-6">
+            <p class="text-[11px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider px-4 mb-2">{t('nav.language')}</p>
+            <nav class="flex flex-col gap-0.5">
+              {alternates.map((a) => (
+                <a
+                  href={a.path}
+                  hreflang={LANG_META[a.lang].htmlLang}
+                  lang={LANG_META[a.lang].htmlLang}
+                  aria-current={a.lang === lang ? 'true' : undefined}
+                  class:list={[
+                    'mobile-nav-link flex items-center gap-3 py-3 px-4 rounded-xl text-[13px] transition-all cursor-pointer',
+                    a.lang === lang
+                      ? 'text-gray-900 dark:text-white bg-gray-100 dark:bg-white/[0.08] font-semibold'
+                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/[0.04] font-medium',
+                  ]}
+                >
+                  {LANG_META[a.lang].label}
+                </a>
+              ))}
+            </nav>
+          </div>
+
           <!-- Mobile utility section -->
           <div class="border-t border-gray-100 dark:border-white/[0.06] pt-4">
-            <p class="text-[11px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider px-4 mb-2">更多</p>
+            <p class="text-[11px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider px-4 mb-2">{t('nav.more')}</p>
             <nav class="flex flex-col gap-0.5">
-              <a href={getPath('/interview')} class={mobileNavLinkClass('/interview')}>面试宝典</a>
-              <a href={getPath('/blog/update-log')} class={mobileNavLinkClass('/blog/update-log')}>更新日志</a>
+              <a href={getPath('/interview')} class={mobileNavLinkClass('/interview')}>{t('nav.interview')}</a>
+              <a href={getPath('/blog/update-log')} class={mobileNavLinkClass('/blog/update-log')}>{t('nav.updateLog')}</a>
               <a href={getPath('/about')} class={mobileNavLinkClass('/about')}>
-                关于
+                {t('nav.about')}
                 <img
                   src={getPath('/images/caomaolufei-avatar-64.png')}
                   alt=""
@@ -295,18 +348,18 @@ const mobileNavLinkClass = (prefix: string) =>
     <!-- Footer -->
     <footer class="bg-white/50 dark:bg-white/[0.02] border-t border-gray-200/60 dark:border-white/[0.06] py-8 mt-auto transition-colors duration-300">
       <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
-        <p class="text-gray-400 dark:text-gray-500 text-xs">&copy; 2025-{new Date().getFullYear()} AIInfraGuide. 开源项目，欢迎贡献！</p>
+        <p class="text-gray-400 dark:text-gray-500 text-xs">&copy; 2025-{new Date().getFullYear()} AIInfraGuide. {t('footer.openSource')}</p>
         <p class="text-gray-400 dark:text-gray-500 text-xs">Built with
           <a href="https://github.com/caomaolufei" target="_blank" class="text-gray-500 dark:text-gray-400 hover:text-[#007aff] transition-colors text-xs cursor-pointer">
-          草帽路飞
+          {t('footer.author')}
           </a>
         </p>
         <div class="flex items-center gap-4">
           <a href="https://zhihu.com/people/zi-you-zi-zai-de-zhan-sheng" target="_blank" rel="noopener noreferrer" class="text-gray-400 dark:text-gray-500 hover:text-[#007aff] transition-colors text-xs cursor-pointer">
-            知乎
+            {t('footer.zhihu')}
           </a>
           <a href="https://mp.weixin.qq.com/s/oxUBDTd-b1aZnh0jGR5tqw" target="_blank" rel="noopener noreferrer" class="text-gray-400 dark:text-gray-500 hover:text-[#007aff] transition-colors text-xs cursor-pointer">
-            公众号
+            {t('footer.wechat')}
           </a>
           <a href="https://github.com/caomaolufei/AIInfraGuide" target="_blank" rel="noopener noreferrer" class="text-gray-400 dark:text-gray-500 hover:text-[#007aff] transition-colors text-xs cursor-pointer">
             GitHub
@@ -319,7 +372,7 @@ const mobileNavLinkClass = (prefix: string) =>
     <button
       id="back-to-top"
       class="fixed bottom-8 right-8 w-11 h-11 bg-[#007aff] hover:bg-[#0062cc] text-white rounded-full shadow-lg opacity-0 pointer-events-none transition-all duration-300 z-50 flex items-center justify-center"
-      aria-label="回到顶部"
+      aria-label={t('nav.backToTop')}
     >
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />

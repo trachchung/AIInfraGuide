@@ -1,0 +1,24 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import ModuleLanding from '../../../components/ModuleLanding.astro';
+import { CATEGORY_URL_PREFIX, MODULE_METADATA } from '../../../utils/moduleMetadata';
+import type { CategorySlug } from '../../../utils/categories';
+import { langParams, langFromParam } from '../../../i18n/ui';
+
+export function getStaticPaths() {
+  return langParams().flatMap((lang) =>
+    Object.entries(CATEGORY_URL_PREFIX).map(([category, prefix]) => ({
+      params: { lang, module: prefix.slice(1) },
+      props: { category: category as CategorySlug, urlPrefix: prefix },
+    })),
+  );
+}
+
+const { category, urlPrefix } = Astro.props;
+const lang = langFromParam(Astro.params.lang);
+const meta = MODULE_METADATA[category]!;
+---
+
+<Layout title={`${meta.title[lang]} - AIInfraGuide`} description={meta.description[lang]}>
+  <ModuleLanding category={category} urlPrefix={urlPrefix} />
+</Layout>

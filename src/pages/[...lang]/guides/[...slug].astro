@@ -1,0 +1,30 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import GuideContent from '../../../components/GuideContent.astro';
+import { flattenChapterOrder } from '../../../utils/chapterGrouping';
+import { getLocalized, type Localized } from '../../../i18n/content';
+import { langParams, langFromParam } from '../../../i18n/ui';
+
+export async function getStaticPaths() {
+  const paths = [];
+  for (const lang of langParams()) {
+    const guides = await getLocalized('guides', langFromParam(lang));
+    for (const guide of guides.filter((g) => g.data.category !== 'course')) {
+      const sameCategory = flattenChapterOrder(guides.filter((g) => g.data.category === guide.data.category));
+      paths.push({ params: { lang, slug: guide.id }, props: { guide, sameCategory } });
+    }
+  }
+  return paths;
+}
+
+interface Props {
+  guide: Localized<'guides'>;
+  sameCategory: Localized<'guides'>[];
+}
+
+const { guide, sameCategory } = Astro.props;
+---
+
+<Layout title={`${guide.data.title} - AIInfraGuide`} description={guide.data.description}>
+  <GuideContent guide={guide} sameCategory={sameCategory} urlPrefix="/guides" />
+</Layout>

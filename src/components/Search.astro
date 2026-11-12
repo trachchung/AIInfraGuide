@@ -1,11 +1,25 @@
 ---
 import '@pagefind/default-ui/css/ui.css';
+import { getLangFromUrl, useTranslations } from '../i18n/ui';
+
+const t = useTranslations(getLangFromUrl(Astro.url));
+const translations = {
+  placeholder: t('search.placeholder'),
+  clear_search: t('search.clear'),
+  load_more: t('search.loadMore'),
+  search_label: t('search.label'),
+  filters_label: t('search.filters'),
+  zero_results: t('search.zero'),
+  many_results: t('search.many'),
+  one_result: t('search.one'),
+  searching: t('search.searching'),
+};
 ---
 
-<div id="search-modal" class="fixed inset-0 z-[100] hidden items-start justify-center pt-20 pb-10 px-4 bg-gray-900/50 backdrop-blur-sm">
+<div id="search-modal" data-i18n={JSON.stringify(translations)} class="fixed inset-0 z-[100] hidden items-start justify-center pt-20 pb-10 px-4 bg-gray-900/50 backdrop-blur-sm">
   <div class="relative w-full max-w-2xl bg-white dark:bg-gray-900 rounded-2xl shadow-2xl ring-1 ring-black/5 overflow-hidden flex flex-col max-h-full">
     <div class="p-4 border-b border-gray-100 dark:border-white/10 flex justify-between items-center">
-      <h2 class="text-lg font-semibold text-gray-900 dark:text-white">搜索</h2>
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-white">{t('search.title')}</h2>
       <button id="close-search" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-1 rounded-md hover:bg-gray-100 dark:hover:bg-white/10 transition-colors">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
       </button>
@@ -29,17 +43,7 @@ import '@pagefind/default-ui/css/ui.css';
       showImages: false,
       resetStyles: false,
       baseUrl: import.meta.env.BASE_URL === '/' ? '/' : import.meta.env.BASE_URL + '/',
-      translations: {
-        placeholder: '搜索文档...',
-        clear_search: '清除',
-        load_more: '加载更多结果',
-        search_label: '搜索此站点',
-        filters_label: '过滤',
-        zero_results: '没有找到关于 [SEARCH_TERM] 的结果',
-        many_results: '[COUNT] 个关于 [SEARCH_TERM] 的结果',
-        one_result: '1 个关于 [SEARCH_TERM] 的结果',
-        searching: '正在搜索 [SEARCH_TERM]...',
-      },
+      translations: JSON.parse(document.getElementById('search-modal')?.dataset.i18n ?? '{}'),
     });
     initialized = true;
 

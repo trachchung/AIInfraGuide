@@ -54,4 +54,17 @@ const interview = defineCollection({
   }),
 });
 
-export const collections = { guides, posts, interview };
+// Translations of the collections above, mirrored by path:
+// docs/i18n/<lang>/<collection>/<same path as the Chinese source>.md
+// Frontmatter holds only the translated fields; everything else comes from the source file.
+const translations = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './docs/i18n' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    tags: z.array(z.string()).optional(),
+    sourceHash: z.string().optional(),
+  }),
+});
+
+export const collections = { guides, posts, interview, translations };

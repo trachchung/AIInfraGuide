@@ -1,0 +1,28 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import InterviewContent from '../../../components/InterviewContent.astro';
+import { flattenCompanyOrder } from '../../../utils/companyGrouping';
+import { getLocalized, type Localized } from '../../../i18n/content';
+import { langParams, langFromParam, useTranslations } from '../../../i18n/ui';
+
+export async function getStaticPaths() {
+  const paths = [];
+  for (const lang of langParams()) {
+    const sorted = flattenCompanyOrder(await getLocalized('interview', langFromParam(lang)));
+    for (const entry of sorted) paths.push({ params: { lang, slug: entry.id }, props: { entry, allInterviews: sorted } });
+  }
+  return paths;
+}
+
+interface Props {
+  entry: Localized<'interview'>;
+  allInterviews: Localized<'interview'>[];
+}
+
+const { entry, allInterviews } = Astro.props;
+const t = useTranslations(langFromParam(Astro.params.lang));
+---
+
+<Layout title={`${entry.data.title} - ${t('interview.title')}`} description={entry.data.description}>
+  <InterviewContent entry={entry} allInterviews={allInterviews} urlPrefix="/interview" />
+</Layout>

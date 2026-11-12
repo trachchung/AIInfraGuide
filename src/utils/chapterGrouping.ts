@@ -15,17 +15,20 @@ export interface GroupedResult {
   ungrouped: Guide[];
 }
 
-/** Regex to detect chapter files by title: "第N章" */
-const CHAPTER_TITLE_RE = /^第(\d+)章/;
+/**
+ * Detect chapter files by file name ("第N章-....md"), not by title, so grouping still works
+ * when the title is translated.
+ */
+const CHAPTER_FILE_RE = /(?:^|\/)第(\d+)章[^/]*$/;
 
-/** Check if an item is a chapter file (by title) */
+/** Check if an item is a chapter file */
 function isChapterItem(item: Guide): boolean {
-  return CHAPTER_TITLE_RE.test(item.data.title);
+  return CHAPTER_FILE_RE.test(item.id);
 }
 
-/** Extract chapter number from title */
+/** Extract chapter number from the file name */
 function getChapterNumber(item: Guide): number {
-  const m = item.data.title.match(CHAPTER_TITLE_RE);
+  const m = item.id.match(CHAPTER_FILE_RE);
   return m ? parseInt(m[1], 10) : 0;
 }
 

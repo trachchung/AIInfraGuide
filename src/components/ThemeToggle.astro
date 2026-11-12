@@ -1,10 +1,13 @@
 ---
+import { getLangFromUrl, useTranslations } from '../i18n/ui';
+
+const t = useTranslations(getLangFromUrl(Astro.url));
 ---
 
 <button
   id="theme-toggle"
   class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 transition-colors duration-300 text-gray-600 dark:text-gray-400"
-  aria-label="切换主题"
+  aria-label={t('nav.toggleTheme')}
 >
   <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
     <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4.22 2.32a1 1 0 011.41 1.41l-.71.71a1 1 0 01-1.41-1.41l.71-.71zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zm-2.32 4.22a1 1 0 01-1.41 1.41l-.71-.71a1 1 0 011.41-1.41l.71.71zM10 16a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm-4.22-2.32a1 1 0 011.41-1.41l.71.71a1 1 0 01-1.41 1.41l-.71-.71zM2 10a1 1 0 011-1h1a1 1 0 110 2H3a1 1 0 01-1-1zm2.32-4.22a1 1 0 011.41-1.41l.71.71a1 1 0 01-1.41 1.41l-.71-.71zM10 5a5 5 0 100 10 5 5 0 000-10z"></path>

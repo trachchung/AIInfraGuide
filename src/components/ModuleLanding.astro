@@ -1,9 +1,10 @@
 ---
-import { getCollection } from 'astro:content';
 import GuideSidebar from './GuideSidebar.astro';
 import { GUIDE_CATEGORIES, type CategorySlug } from '../utils/categories';
 import { groupByChapter } from '../utils/chapterGrouping';
 import { MODULE_METADATA } from '../utils/moduleMetadata';
+import { getLocalized } from '../i18n/content';
+import { getLangFromUrl, localePath, useTranslations, type UIKey } from '../i18n/ui';
 
 interface Props {
   category: CategorySlug;
@@ -12,19 +13,19 @@ interface Props {
 
 const { category, urlPrefix } = Astro.props;
 
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 const meta = MODULE_METADATA[category];
 const categoryMeta = GUIDE_CATEGORIES[category];
+const categoryLabel = t(`cat.${category}` as UIKey);
 
-const guides = await getCollection('guides', ({ data }) => !data.draft && data.category === category);
+const guides = (await getLocalized('guides', lang)).filter((g) => g.data.category === category);
 const sorted = guides.sort((a, b) => a.data.order - b.data.order);
 const { chapters, ungrouped } = groupByChapter(sorted);
 
 const totalArticles = sorted.length;
 
-const getPath = (path: string) => {
-  const base = import.meta.env.BASE_URL;
-  return base === '/' ? path : `${base.replace(/\/$/, '')}${path}`;
-};
+const getPath = (path: string) => localePath(lang, path);
 
 const firstGuide = sorted[0];
 const startHref = firstGuide ? getPath(`${urlPrefix}/${firstGuide.id}`) : '#';
@@ -45,19 +46,19 @@ const startHref = firstGuide ? getPath(`${urlPrefix}/${firstGuide.id}`) : '#';
           class="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-md"
           style={`background: ${meta?.color || '#3B82F6'}15; color: ${meta?.color || '#3B82F6'};`}
         >
-          {categoryMeta.icon} {categoryMeta.label}
+          {categoryMeta.icon} {categoryLabel}
         </span>
         <span class="text-xs text-gray-400 dark:text-gray-500 font-medium tabular-nums">
-          {totalArticles} 篇文章 · {chapters.length} 个章节
+          {t('module.stats', { articles: totalArticles, chapters: chapters.length })}
         </span>
       </div>
 
       <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 leading-tight">
-        {meta?.title || categoryMeta.label}
+        {meta?.title[lang] || categoryLabel}
       </h1>
 
       <p class="text-lg text-gray-500 dark:text-gray-400 leading-relaxed mb-8">
-        {meta?.description || `${categoryMeta.label}相关技术文档`}
+        {meta?.description[lang] || t('module.docs', { label: categoryLabel })}
       </p>
 
       {firstGuide && (
@@ -65,7 +66,7 @@ const startHref = firstGuide ? getPath(`${urlPrefix}/${firstGuide.id}`) : '#';
           href={startHref}
           class="group inline-flex items-center gap-2 px-6 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-xl font-semibold hover:bg-gray-800 dark:hover:bg-gray-100 transition-all duration-300 shadow-lg shadow-gray-900/10 dark:shadow-white/10 cursor-pointer text-sm"
         >
-          开始学习
+          {t('home.start')}
           <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
           </svg>
@@ -75,7 +76,7 @@ const startHref = firstGuide ? getPath(`${urlPrefix}/${firstGuide.id}`) : '#';
 
     {/* Chapter Directory */}
     <div class="mb-12">
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">章节目录</h2>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">{t('module.toc')}</h2>
 
       {/* Ungrouped articles */}
       {ungrouped.length > 0 && (
@@ -121,7 +122,7 @@ const startHref = firstGuide ? getPath(`${urlPrefix}/${firstGuide.id}`) : '#';
                 </a>
                 {ch.children.length > 0 && (
                   <span class="ml-auto text-xs text-gray-400 dark:text-gray-500 font-medium tabular-nums">
-                    {ch.children.length} 篇
+                    {t('module.chapterCount', { n: ch.children.length })}
                   </span>
                 )}
               </div>
@@ -160,7 +161,7 @@ const startHref = firstGuide ? getPath(`${urlPrefix}/${firstGuide.id}`) : '#';
     {/* External Resources */}
     {meta?.resources && meta.resources.length > 0 && (
       <div class="mb-12">
-        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">延伸资源</h2>
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">{t('module.resources')}</h2>
         <div class="space-y-4">
           {meta.resources.map((res) => (
             <a
@@ -174,10 +175,10 @@ const startHref = firstGuide ? getPath(`${urlPrefix}/${firstGuide.id}`) : '#';
                   class="inline-flex items-center px-2.5 py-0.5 text-xs font-medium rounded-md shrink-0"
                   style={`background: ${meta.color}15; color: ${meta.color};`}
                 >
-                  {res.type}
+                  {res.type[lang]}
                 </span>
                 <span class="font-semibold text-gray-900 dark:text-white text-[15px] group-hover:text-[#007aff] dark:group-hover:text-[#0a84ff] transition-colors">
-                  {res.title}
+                  {res.title[lang]}
                 </span>
                 <svg
                   class="w-4 h-4 ml-auto shrink-0 text-gray-400 dark:text-gray-500 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
@@ -189,7 +190,7 @@ const startHref = firstGuide ? getPath(`${urlPrefix}/${firstGuide.id}`) : '#';
                   <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
                 </svg>
               </div>
-              <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{res.description}</p>
+              <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{res.description[lang]}</p>
             </a>
           ))}
         </div>
@@ -199,7 +200,7 @@ const startHref = firstGuide ? getPath(`${urlPrefix}/${firstGuide.id}`) : '#';
     {/* Learning Tips */}
     {meta?.tips && meta.tips.length > 0 && (
       <div class="mb-12">
-        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">学习建议</h2>
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">{t('module.tips')}</h2>
         <div class="rounded-xl border border-gray-200 dark:border-white/[0.06] p-6 bg-white dark:bg-white/[0.02]">
           {meta.prerequisites && (
             <div class="mb-5 pb-5 border-b border-gray-100 dark:border-white/[0.06]">
@@ -207,9 +208,9 @@ const startHref = firstGuide ? getPath(`${urlPrefix}/${firstGuide.id}`) : '#';
                 <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
                 </svg>
-                前置要求
+                {t('module.prereq')}
               </h3>
-              <p class="text-sm text-gray-600 dark:text-gray-400">{meta.prerequisites}</p>
+              <p class="text-sm text-gray-600 dark:text-gray-400">{meta.prerequisites[lang]}</p>
             </div>
           )}
           <ul class="space-y-3">
@@ -218,7 +219,7 @@ const startHref = firstGuide ? getPath(`${urlPrefix}/${firstGuide.id}`) : '#';
                 <svg class="w-5 h-5 shrink-0 mt-0.5" style={`color: ${meta.color};`} fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                 </svg>
-                {tip}
+                {tip[lang]}
               </li>
             ))}
           </ul>

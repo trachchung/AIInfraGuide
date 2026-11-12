@@ -1,0 +1,40 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import GuideContent from '../../../components/GuideContent.astro';
+import { flattenChapterOrder } from '../../../utils/chapterGrouping';
+import { CATEGORY_URL_PREFIX } from '../../../utils/moduleMetadata';
+import type { CategorySlug } from '../../../utils/categories';
+import { getLocalized, type Localized } from '../../../i18n/content';
+import { langParams, langFromParam } from '../../../i18n/ui';
+
+// One route for every module (/cuda, /distributed, /inference, /prerequisites) in every language.
+export async function getStaticPaths() {
+  const paths = [];
+  for (const lang of langParams()) {
+    const guides = await getLocalized('guides', langFromParam(lang));
+    for (const [category, prefix] of Object.entries(CATEGORY_URL_PREFIX)) {
+      const sameCategory = flattenChapterOrder(guides.filter((g) => g.data.category === category));
+      for (const guide of sameCategory) {
+        paths.push({
+          params: { lang, module: prefix.slice(1), slug: guide.id },
+          props: { guide, sameCategory, category: category as CategorySlug, urlPrefix: prefix },
+        });
+      }
+    }
+  }
+  return paths;
+}
+
+interface Props {
+  guide: Localized<'guides'>;
+  sameCategory: Localized<'guides'>[];
+  category: CategorySlug;
+  urlPrefix: string;
+}
+
+const { guide, sameCategory, category, urlPrefix } = Astro.props;
+---
+
+<Layout title={`${guide.data.title} - AIInfraGuide`} description={guide.data.description}>
+  <GuideContent guide={guide} sameCategory={sameCategory} sidebarCategories={[category]} urlPrefix={urlPrefix} />
+</Layout>
