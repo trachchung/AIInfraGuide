@@ -8,7 +8,9 @@
     "build": "astro check && astro build && pagefind --site dist && cp -r dist/pagefind public/pagefind",
     "preview": "astro preview",
     "astro": "astro",
-    "deploy:cf": "npm run build && wrangler pages deploy dist --project-name=infra-guide --branch=main"
+    "deploy:cf": "npm run build && wrangler pages deploy dist --project-name=infra-guide --branch=main",
+    "guides:rename": "node scripts/rename-guides.mjs",
+    "guides:sync-upstream": "node scripts/sync-upstream-guides.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.8",

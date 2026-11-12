@@ -1,0 +1,484 @@
+{
+  "version": 1,
+  "description": "Chinese→English path map for docs/guides (and docs/i18n/*/guides mirrors). Paths are relative to the guides root.",
+  "directories": [
+    {
+      "zh": "模块一-前置知识",
+      "en": "prerequisites"
+    },
+    {
+      "zh": "模块一-前置知识/communication",
+      "en": "prerequisites/communication"
+    },
+    {
+      "zh": "模块一-前置知识/gpu",
+      "en": "prerequisites/gpu"
+    },
+    {
+      "zh": "模块一-前置知识/pyroch",
+      "en": "prerequisites/pyroch"
+    },
+    {
+      "zh": "模块一-前置知识/transformer",
+      "en": "prerequisites/transformer"
+    },
+    {
+      "zh": "模块三-分布式训练",
+      "en": "distributed-training"
+    },
+    {
+      "zh": "模块二-CUDA编程与算子优化",
+      "en": "cuda-optimization"
+    },
+    {
+      "zh": "模块四-推理优化",
+      "en": "inference-optimization"
+    },
+    {
+      "zh": "模块四-推理优化/第1章-LLM推理基础",
+      "en": "inference-optimization/ch01-llm-inference-basics"
+    },
+    {
+      "zh": "模块四-推理优化/第2章-推理引擎核心技术",
+      "en": "inference-optimization/ch02-inference-engine-core"
+    },
+    {
+      "zh": "模块四-推理优化/第3章-nano-vllm源码解读",
+      "en": "inference-optimization/ch03-nano-vllm-source"
+    },
+    {
+      "zh": "模块四-推理优化/第4章-量化",
+      "en": "inference-optimization/ch04-quantization"
+    },
+    {
+      "zh": "模块四-推理优化/第5章-Speculative-Decoding",
+      "en": "inference-optimization/ch05-speculative-decoding"
+    },
+    {
+      "zh": "模块四-推理优化/第6章-分布式推理",
+      "en": "inference-optimization/ch06-distributed-inference"
+    },
+    {
+      "zh": "模块四-推理优化/第7章-PD解耦架构",
+      "en": "inference-optimization/ch07-pd-disaggregation"
+    },
+    {
+      "zh": "模块四-推理优化/第8章-生产部署与运维",
+      "en": "inference-optimization/ch08-production-ops"
+    },
+    {
+      "zh": "模块四-推理优化/第9章-端侧推理",
+      "en": "inference-optimization/ch09-on-device-inference"
+    }
+  ],
+  "files": [
+    {
+      "zh": "AI Infra学习路线.md",
+      "en": "ai-infra-learning-path.md"
+    },
+    {
+      "zh": "模块一-前置知识/communication/collective-communication-primer.md",
+      "en": "prerequisites/communication/collective-communication-primer.md"
+    },
+    {
+      "zh": "模块一-前置知识/gpu/gpu-basics.md",
+      "en": "prerequisites/gpu/gpu-basics.md"
+    },
+    {
+      "zh": "模块一-前置知识/gpu/nvidia-gpu-evolution.md",
+      "en": "prerequisites/gpu/nvidia-gpu-evolution.md"
+    },
+    {
+      "zh": "模块一-前置知识/pyroch/PyTorch框架入门.md",
+      "en": "prerequisites/pyroch/pytorch-intro.md"
+    },
+    {
+      "zh": "模块一-前置知识/transformer/3.1 AI Infra工程师为什么必须懂Transformer.md",
+      "en": "prerequisites/transformer/3.1-why-ai-infra-engineers-need-transformer.md"
+    },
+    {
+      "zh": "模块一-前置知识/transformer/3.2 Transformer全貌及代码实现.md",
+      "en": "prerequisites/transformer/3.2-transformer-overview-and-code.md"
+    },
+    {
+      "zh": "模块一-前置知识/transformer/3.3 Self-Attention机制深入理解.md",
+      "en": "prerequisites/transformer/3.3-self-attention.md"
+    },
+    {
+      "zh": "模块一-前置知识/transformer/3.4 Transformer前馈网络FFN深入理解.md",
+      "en": "prerequisites/transformer/3.4-transformer-ffn.md"
+    },
+    {
+      "zh": "模块一-前置知识/transformer/3.5 Transformer位置编码深入理解.md",
+      "en": "prerequisites/transformer/3.5-positional-encoding.md"
+    },
+    {
+      "zh": "模块一-前置知识/transformer/3.6 LayerNorm与残差连接深入理解.md",
+      "en": "prerequisites/transformer/3.6-layernorm-and-residuals.md"
+    },
+    {
+      "zh": "模块一-前置知识/transformer/3.7 Transformer Decoder Block完整解析.md",
+      "en": "prerequisites/transformer/3.7-transformer-decoder-block.md"
+    },
+    {
+      "zh": "模块一-前置知识/transformer/3.8 从Transformer到LLM自回归生成深入理解.md",
+      "en": "prerequisites/transformer/3.8-from-transformer-to-llm.md"
+    },
+    {
+      "zh": "模块一-前置知识/transformer/3.9 Tokenization与词嵌入.md",
+      "en": "prerequisites/transformer/3.9-tokenization-and-embeddings.md"
+    },
+    {
+      "zh": "模块一-前置知识/transformer/Transformer架构快速入门.md",
+      "en": "prerequisites/transformer/transformer-quickstart.md"
+    },
+    {
+      "zh": "模块一-前置知识/第1章-编程语言基础.md",
+      "en": "prerequisites/ch01-programming-languages.md"
+    },
+    {
+      "zh": "模块一-前置知识/第2章-数学基础.md",
+      "en": "prerequisites/ch02-math-foundations.md"
+    },
+    {
+      "zh": "模块一-前置知识/第3章-Transformer架构详解.md",
+      "en": "prerequisites/ch03-transformer-architecture.md"
+    },
+    {
+      "zh": "模块一-前置知识/第4章-PyTorch框架.md",
+      "en": "prerequisites/ch04-pytorch.md"
+    },
+    {
+      "zh": "模块一-前置知识/第5章-GPU硬件概论.md",
+      "en": "prerequisites/ch05-gpu-hardware.md"
+    },
+    {
+      "zh": "模块一-前置知识/第6章-集合通信基础.md",
+      "en": "prerequisites/ch06-collective-communication.md"
+    },
+    {
+      "zh": "模块三-分布式训练/1.1 分布式训练总论.md",
+      "en": "distributed-training/1.1-distributed-training-overview.md"
+    },
+    {
+      "zh": "模块三-分布式训练/1.2 环境搭建与分布式启动.md",
+      "en": "distributed-training/1.2-env-setup-and-launch.md"
+    },
+    {
+      "zh": "模块三-分布式训练/2.1 集合通信原语详解.md",
+      "en": "distributed-training/2.1-collective-primitives.md"
+    },
+    {
+      "zh": "模块三-分布式训练/3.1 优化器原理与显存开销分析.md",
+      "en": "distributed-training/3.1-optimizer-memory-analysis.md"
+    },
+    {
+      "zh": "模块三-分布式训练/4.1 数据并行详解.md",
+      "en": "distributed-training/4.1-data-parallelism.md"
+    },
+    {
+      "zh": "模块三-分布式训练/4.2 PyTorch 数据并行从原理到实战.md",
+      "en": "distributed-training/4.2-pytorch-data-parallel-practice.md"
+    },
+    {
+      "zh": "模块三-分布式训练/第10章-MoE并行.md",
+      "en": "distributed-training/ch10-moe-parallelism.md"
+    },
+    {
+      "zh": "模块三-分布式训练/第11章-3D并行与混合并行策略.md",
+      "en": "distributed-training/ch11-3d-and-hybrid-parallelism.md"
+    },
+    {
+      "zh": "模块三-分布式训练/第1章-分布式训练总论.md",
+      "en": "distributed-training/ch01-distributed-training-overview.md"
+    },
+    {
+      "zh": "模块三-分布式训练/第2章-集合通信原语.md",
+      "en": "distributed-training/ch02-collective-primitives.md"
+    },
+    {
+      "zh": "模块三-分布式训练/第3章-优化器.md",
+      "en": "distributed-training/ch03-optimizers.md"
+    },
+    {
+      "zh": "模块三-分布式训练/第4章-数据并行.md",
+      "en": "distributed-training/ch04-data-parallelism.md"
+    },
+    {
+      "zh": "模块三-分布式训练/第5章-ZeRO系列.md",
+      "en": "distributed-training/ch05-zero.md"
+    },
+    {
+      "zh": "模块三-分布式训练/第6章-张量并行与序列并行.md",
+      "en": "distributed-training/ch06-tensor-and-sequence-parallelism.md"
+    },
+    {
+      "zh": "模块三-分布式训练/第7章-流水线并行.md",
+      "en": "distributed-training/ch07-pipeline-parallelism.md"
+    },
+    {
+      "zh": "模块三-分布式训练/第8章-混合精度与显存优化.md",
+      "en": "distributed-training/ch08-mixed-precision-and-memory.md"
+    },
+    {
+      "zh": "模块三-分布式训练/第9章-长序列训练与上下文并行.md",
+      "en": "distributed-training/ch09-long-sequence-and-context-parallel.md"
+    },
+    {
+      "zh": "模块二-CUDA编程与算子优化/1.1-CUDA开发环境搭建.md",
+      "en": "cuda-optimization/1.1-cuda-dev-environment.md"
+    },
+    {
+      "zh": "模块二-CUDA编程与算子优化/1.2-CUDA编程模型.md",
+      "en": "cuda-optimization/1.2-cuda-programming-model.md"
+    },
+    {
+      "zh": "模块二-CUDA编程与算子优化/1.3-CUDA内存模型.md",
+      "en": "cuda-optimization/1.3-cuda-memory-model.md"
+    },
+    {
+      "zh": "模块二-CUDA编程与算子优化/1.4-第一个实用Kernel.md",
+      "en": "cuda-optimization/1.4-first-practical-kernel.md"
+    },
+    {
+      "zh": "模块二-CUDA编程与算子优化/2.1-Warp与执行模型.md",
+      "en": "cuda-optimization/2.1-warp-and-execution-model.md"
+    },
+    {
+      "zh": "模块二-CUDA编程与算子优化/2.2-内存访问优化.md",
+      "en": "cuda-optimization/2.2-memory-access-optimization.md"
+    },
+    {
+      "zh": "模块二-CUDA编程与算子优化/2.3-Occupancy与资源分配.md",
+      "en": "cuda-optimization/2.3-occupancy-and-resources.md"
+    },
+    {
+      "zh": "模块二-CUDA编程与算子优化/2.4-同步与原子操作.md",
+      "en": "cuda-optimization/2.4-sync-and-atomics.md"
+    },
+    {
+      "zh": "模块二-CUDA编程与算子优化/3.1-CUDA Reduce算子优化.md",
+      "en": "cuda-optimization/3.1-cuda-reduce-optimization.md"
+    },
+    {
+      "zh": "模块二-CUDA编程与算子优化/4.1-CUDA GEMM算子性能优化.md",
+      "en": "cuda-optimization/4.1-cuda-gemm-optimization.md"
+    },
+    {
+      "zh": "模块二-CUDA编程与算子优化/5.1-CUDA Softmax朴素实现优化.md",
+      "en": "cuda-optimization/5.1-cuda-softmax-naive.md"
+    },
+    {
+      "zh": "模块二-CUDA编程与算子优化/5.2-CUDA Online Softmax实现.md",
+      "en": "cuda-optimization/5.2-cuda-online-softmax.md"
+    },
+    {
+      "zh": "模块二-CUDA编程与算子优化/6.1-FlashAttention V1详解.md",
+      "en": "cuda-optimization/6.1-flashattention-v1.md"
+    },
+    {
+      "zh": "模块二-CUDA编程与算子优化/6.2-FlashAttention V2详解.md",
+      "en": "cuda-optimization/6.2-flashattention-v2.md"
+    },
+    {
+      "zh": "模块二-CUDA编程与算子优化/7.1-Triton编程框架.md",
+      "en": "cuda-optimization/7.1-triton-framework.md"
+    },
+    {
+      "zh": "模块二-CUDA编程与算子优化/CUDA编程入门指南.md",
+      "en": "cuda-optimization/cuda-programming-guide.md"
+    },
+    {
+      "zh": "模块二-CUDA编程与算子优化/第1章-CUDA编程入门.md",
+      "en": "cuda-optimization/ch01-cuda-intro.md"
+    },
+    {
+      "zh": "模块二-CUDA编程与算子优化/第2章-CUDA性能优化基础.md",
+      "en": "cuda-optimization/ch02-cuda-performance-basics.md"
+    },
+    {
+      "zh": "模块二-CUDA编程与算子优化/第3章-经典算子实现-Reduce.md",
+      "en": "cuda-optimization/ch03-classic-kernels-reduce.md"
+    },
+    {
+      "zh": "模块二-CUDA编程与算子优化/第4章-经典算子实现-GEMM.md",
+      "en": "cuda-optimization/ch04-classic-kernels-gemm.md"
+    },
+    {
+      "zh": "模块二-CUDA编程与算子优化/第5章-经典算子实现-Softmax与算子融合.md",
+      "en": "cuda-optimization/ch05-classic-kernels-softmax-fusion.md"
+    },
+    {
+      "zh": "模块二-CUDA编程与算子优化/第6章-Attention算子.md",
+      "en": "cuda-optimization/ch06-attention-kernels.md"
+    },
+    {
+      "zh": "模块二-CUDA编程与算子优化/第7章-AI编译器.md",
+      "en": "cuda-optimization/ch07-ai-compilers.md"
+    },
+    {
+      "zh": "模块二-CUDA编程与算子优化/第8章-性能分析工具链.md",
+      "en": "cuda-optimization/ch08-profiling-toolchain.md"
+    },
+    {
+      "zh": "模块四-推理优化/第1章-LLM推理基础/1.1-LLM推理基础.md",
+      "en": "inference-optimization/ch01-llm-inference-basics/1.1-llm-inference-basics.md"
+    },
+    {
+      "zh": "模块四-推理优化/第1章-LLM推理基础/1.2-vLLM快速入门.md",
+      "en": "inference-optimization/ch01-llm-inference-basics/1.2-vllm-quickstart.md"
+    },
+    {
+      "zh": "模块四-推理优化/第1章-LLM推理基础/第1章-LLM推理基础.md",
+      "en": "inference-optimization/ch01-llm-inference-basics/ch01-llm-inference-basics.md"
+    },
+    {
+      "zh": "模块四-推理优化/第2章-推理引擎核心技术/2.1-PagedAttention.md",
+      "en": "inference-optimization/ch02-inference-engine-core/2.1-paged-attention.md"
+    },
+    {
+      "zh": "模块四-推理优化/第2章-推理引擎核心技术/2.2-Continuous Batching.md",
+      "en": "inference-optimization/ch02-inference-engine-core/2.2-continuous-batching.md"
+    },
+    {
+      "zh": "模块四-推理优化/第2章-推理引擎核心技术/2.3-Prefix Cache 与 RadixAttention.md",
+      "en": "inference-optimization/ch02-inference-engine-core/2.3-prefix-cache-and-radixattention.md"
+    },
+    {
+      "zh": "模块四-推理优化/第2章-推理引擎核心技术/2.4-Chunked Prefill 与统一调度.md",
+      "en": "inference-optimization/ch02-inference-engine-core/2.4-chunked-prefill-and-scheduling.md"
+    },
+    {
+      "zh": "模块四-推理优化/第2章-推理引擎核心技术/2.5-Attention 后端与图优化.md",
+      "en": "inference-optimization/ch02-inference-engine-core/2.5-attention-backends-and-graph-opts.md"
+    },
+    {
+      "zh": "模块四-推理优化/第2章-推理引擎核心技术/第2章-推理引擎核心技术.md",
+      "en": "inference-optimization/ch02-inference-engine-core/ch02-inference-engine-core.md"
+    },
+    {
+      "zh": "模块四-推理优化/第3章-nano-vllm源码解读/3.1-项目全景与四层架构.md",
+      "en": "inference-optimization/ch03-nano-vllm-source/3.1-project-overview-and-layers.md"
+    },
+    {
+      "zh": "模块四-推理优化/第3章-nano-vllm源码解读/3.2-配置入口与推理主循环.md",
+      "en": "inference-optimization/ch03-nano-vllm-source/3.2-config-and-inference-loop.md"
+    },
+    {
+      "zh": "模块四-推理优化/第3章-nano-vllm源码解读/3.3-模型与核心算子.md",
+      "en": "inference-optimization/ch03-nano-vllm-source/3.3-model-and-core-ops.md"
+    },
+    {
+      "zh": "模块四-推理优化/第3章-nano-vllm源码解读/3.4-KVCache与BlockManager.md",
+      "en": "inference-optimization/ch03-nano-vllm-source/3.4-kvcache-and-block-manager.md"
+    },
+    {
+      "zh": "模块四-推理优化/第3章-nano-vllm源码解读/3.5-Scheduler与连续批处理.md",
+      "en": "inference-optimization/ch03-nano-vllm-source/3.5-scheduler-and-continuous-batching.md"
+    },
+    {
+      "zh": "模块四-推理优化/第3章-nano-vllm源码解读/3.6-ModelRunner引擎循环与性能.md",
+      "en": "inference-optimization/ch03-nano-vllm-source/3.6-model-runner-and-performance.md"
+    },
+    {
+      "zh": "模块四-推理优化/第3章-nano-vllm源码解读/第3章-nano-vllm源码解读.md",
+      "en": "inference-optimization/ch03-nano-vllm-source/ch03-nano-vllm-source.md"
+    },
+    {
+      "zh": "模块四-推理优化/第4章-量化/4.1-量化基础.md",
+      "en": "inference-optimization/ch04-quantization/4.1-quantization-basics.md"
+    },
+    {
+      "zh": "模块四-推理优化/第4章-量化/4.2-W8A8与SmoothQuant.md",
+      "en": "inference-optimization/ch04-quantization/4.2-w8a8-and-smoothquant.md"
+    },
+    {
+      "zh": "模块四-推理优化/第4章-量化/4.3-Weight-only-INT4.md",
+      "en": "inference-optimization/ch04-quantization/4.3-weight-only-int4.md"
+    },
+    {
+      "zh": "模块四-推理优化/第4章-量化/4.4-KV-Cache量化.md",
+      "en": "inference-optimization/ch04-quantization/4.4-kv-cache-quantization.md"
+    },
+    {
+      "zh": "模块四-推理优化/第4章-量化/4.5-FP8与NVFP4-MXFP4.md",
+      "en": "inference-optimization/ch04-quantization/4.5-fp8-nvfp4-mxfp4.md"
+    },
+    {
+      "zh": "模块四-推理优化/第4章-量化/4.6-量化选型与vLLM实战.md",
+      "en": "inference-optimization/ch04-quantization/4.6-quantization-selection-and-vllm.md"
+    },
+    {
+      "zh": "模块四-推理优化/第4章-量化/第4章-量化.md",
+      "en": "inference-optimization/ch04-quantization/ch04-quantization.md"
+    },
+    {
+      "zh": "模块四-推理优化/第5章-Speculative-Decoding/5.1-投机解码核心原理.md",
+      "en": "inference-optimization/ch05-speculative-decoding/5.1-speculative-decoding-basics.md"
+    },
+    {
+      "zh": "模块四-推理优化/第5章-Speculative-Decoding/5.2-Draft模型与无模型方案.md",
+      "en": "inference-optimization/ch05-speculative-decoding/5.2-draft-and-model-free.md"
+    },
+    {
+      "zh": "模块四-推理优化/第5章-Speculative-Decoding/5.3-Medusa与EAGLE.md",
+      "en": "inference-optimization/ch05-speculative-decoding/5.3-medusa-and-eagle.md"
+    },
+    {
+      "zh": "模块四-推理优化/第5章-Speculative-Decoding/5.4-收益边界与限制.md",
+      "en": "inference-optimization/ch05-speculative-decoding/5.4-gains-and-limits.md"
+    },
+    {
+      "zh": "模块四-推理优化/第5章-Speculative-Decoding/5.5-vLLM投机解码实战.md",
+      "en": "inference-optimization/ch05-speculative-decoding/5.5-vllm-speculative-decoding.md"
+    },
+    {
+      "zh": "模块四-推理优化/第5章-Speculative-Decoding/第5章-Speculative-Decoding.md",
+      "en": "inference-optimization/ch05-speculative-decoding/ch05-speculative-decoding.md"
+    },
+    {
+      "zh": "模块四-推理优化/第6章-分布式推理/6.1-推理并行策略总览.md",
+      "en": "inference-optimization/ch06-distributed-inference/6.1-inference-parallelism-overview.md"
+    },
+    {
+      "zh": "模块四-推理优化/第6章-分布式推理/6.2-张量并行推理.md",
+      "en": "inference-optimization/ch06-distributed-inference/6.2-tensor-parallel-inference.md"
+    },
+    {
+      "zh": "模块四-推理优化/第6章-分布式推理/6.3-流水线并行推理.md",
+      "en": "inference-optimization/ch06-distributed-inference/6.3-pipeline-parallel-inference.md"
+    },
+    {
+      "zh": "模块四-推理优化/第6章-分布式推理/6.4-数据并行与专家并行.md",
+      "en": "inference-optimization/ch06-distributed-inference/6.4-data-and-expert-parallel.md"
+    },
+    {
+      "zh": "模块四-推理优化/第6章-分布式推理/6.5-多节点部署.md",
+      "en": "inference-optimization/ch06-distributed-inference/6.5-multi-node-deployment.md"
+    },
+    {
+      "zh": "模块四-推理优化/第6章-分布式推理/6.6-vLLM分布式部署实战.md",
+      "en": "inference-optimization/ch06-distributed-inference/6.6-vllm-distributed-deployment.md"
+    },
+    {
+      "zh": "模块四-推理优化/第6章-分布式推理/第6章-分布式推理.md",
+      "en": "inference-optimization/ch06-distributed-inference/ch06-distributed-inference.md"
+    },
+    {
+      "zh": "模块四-推理优化/第7章-PD解耦架构/第7章-PD解耦架构.md",
+      "en": "inference-optimization/ch07-pd-disaggregation/ch07-pd-disaggregation.md"
+    },
+    {
+      "zh": "模块四-推理优化/第8章-生产部署与运维/第8章-生产部署与运维.md",
+      "en": "inference-optimization/ch08-production-ops/ch08-production-ops.md"
+    },
+    {
+      "zh": "模块四-推理优化/第9章-端侧推理/9.1-端侧推理基础.md",
+      "en": "inference-optimization/ch09-on-device-inference/9.1-on-device-inference-basics.md"
+    },
+    {
+      "zh": "模块四-推理优化/第9章-端侧推理/第9章-端侧推理.md",
+      "en": "inference-optimization/ch09-on-device-inference/ch09-on-device-inference.md"
+    }
+  ]
+}

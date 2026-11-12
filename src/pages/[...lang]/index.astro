@@ -57,7 +57,7 @@ const categoryCounts = Object.entries(GUIDE_CATEGORIES).map(([slug, meta]) => ({
 }));
 
 const categoryUrlPrefix: Record<string, string> = {
-  'learning-path': '/guides/ai-infra学习路线',
+  'learning-path': '/guides/ai-infra-learning-path',
   'prerequisites': '/prerequisites',
   'cuda-optimization': '/cuda',
   'distributed-training': '/distributed',
@@ -106,7 +106,7 @@ const categoryUrlPrefix: Record<string, string> = {
       <div class="flex flex-col sm:flex-row gap-3 justify-center">
         {categoryCounts.find((c) => c.firstGuide) && (
           <a
-            href={getPath('/guides/ai-infra学习路线/')}
+            href={getPath('/guides/ai-infra-learning-path/')}
             class="group inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-xl font-semibold hover:bg-gray-800 dark:hover:bg-gray-100 transition-all duration-300 shadow-lg shadow-gray-900/10 dark:shadow-white/10 cursor-pointer"
           >
             {t('home.start')}
