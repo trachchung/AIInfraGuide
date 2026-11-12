@@ -1,0 +1,12 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import InterviewLanding from '../../../components/InterviewLanding.astro';
+import { langParams, langFromParam, useTranslations } from '../../../i18n/ui';
+
+export const getStaticPaths = () => langParams().map((lang) => ({ params: { lang } }));
+const t = useTranslations(langFromParam(Astro.params.lang));
+---
+
+<Layout title={`${t('interview.title')} - AIInfraGuide`} description={t('interview.pageDesc')}>
+  <InterviewLanding urlPrefix="/interview" />
+</Layout>

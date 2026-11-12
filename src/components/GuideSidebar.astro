@@ -1,6 +1,7 @@
 ---
-import { getCollection } from 'astro:content';
 import { GUIDE_CATEGORIES, type CategorySlug } from '../utils/categories';
+import { getLocalized } from '../i18n/content';
+import { getLangFromUrl, localePath, useTranslations, type UIKey } from '../i18n/ui';
 import { groupByChapter } from '../utils/chapterGrouping';
 
 interface Props {
@@ -12,7 +13,9 @@ interface Props {
 
 const { categories, urlPrefix = '/guides' } = Astro.props;
 
-const guides = await getCollection('guides', ({ data }) => !data.draft);
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const guides = await getLocalized('guides', lang);
 const currentPath = decodeURIComponent(Astro.url.pathname);
 
 const gradientMap: Record<string, string> = {
@@ -28,11 +31,7 @@ const categoriesToShow = categories
   ? Object.entries(GUIDE_CATEGORIES).filter(([slug]) => categories.includes(slug as CategorySlug))
   : Object.entries(GUIDE_CATEGORIES);
 
-const getGuidePath = (guideId: string) => {
-  const base = import.meta.env.BASE_URL;
-  const path = `${urlPrefix}/${guideId}`;
-  return base === '/' ? path : `${base.replace(/\/$/, '')}${path}`;
-};
+const getGuidePath = (guideId: string) => localePath(lang, `${urlPrefix}/${guideId}`);
 
 const isActivePath = (guideId: string) => {
   const guidePath = getGuidePath(guideId);
@@ -50,6 +49,7 @@ const grouped = categoriesToShow
     return {
       slug: slug as CategorySlug,
       ...meta,
+      label: t(`cat.${slug}` as UIKey),
       color: gradientMap[slug] || '#3B82F6',
       items,
       chapterData,
@@ -136,7 +136,7 @@ const grouped = categoriesToShow
                     {hasChildren && (
                       <button
                         class="chapter-toggle w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors shrink-0"
-                        aria-label="展开/折叠"
+                        aria-label={t('nav.toggle')}
                       >
                         <svg class:list={['w-3.5 h-3.5 transition-transform duration-200', isExpanded && 'rotate-90']} fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                           <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />

@@ -1,28 +1,30 @@
 ---
-import { type CollectionEntry, render } from 'astro:content';
+import { render } from 'astro:content';
 import InterviewSidebar from './InterviewSidebar.astro';
 import TableOfContents from './TableOfContents.astro';
-import { TIER_META } from '../utils/companyGrouping';
+import { TIER_META, companyName } from '../utils/companyGrouping';
+import { getLangFromUrl, localePath, useTranslations, LANG_META, type UIKey } from '../i18n/ui';
+import type { Localized } from '../i18n/content';
 
 interface Props {
-  entry: CollectionEntry<'interview'>;
-  allInterviews: CollectionEntry<'interview'>[];
+  entry: Localized<'interview'>;
+  allInterviews: Localized<'interview'>[];
   urlPrefix: string;
 }
 
 const { entry, allInterviews, urlPrefix } = Astro.props;
 const { Content, headings } = await render(entry);
 
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 const tierMeta = TIER_META[entry.data.tier] ?? { label: entry.data.tier, color: '#6B7280' };
+const tierLabel = t(`tier.${entry.data.tier}` as UIKey);
 
 const currentIndex = allInterviews.findIndex((i) => i.id === entry.id);
 const prevEntry = currentIndex > 0 ? allInterviews[currentIndex - 1] : null;
 const nextEntry = currentIndex < allInterviews.length - 1 ? allInterviews[currentIndex + 1] : null;
 
-const getPath = (path: string) => {
-  const base = import.meta.env.BASE_URL;
-  return base === '/' ? path : `${base.replace(/\/$/, '')}${path}`;
-};
+const getPath = (path: string) => localePath(lang, path);
 ---
 
 <div class="max-w-[1800px] mx-auto px-6 lg:pl-3 py-12 flex gap-8 xl:gap-10">
@@ -40,26 +42,26 @@ const getPath = (path: string) => {
           class="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-md"
           style={`background: ${tierMeta.color}15; color: ${tierMeta.color};`}
         >
-          {tierMeta.label}
+          {tierLabel}
         </span>
         {entry.data.company !== '综合' && (
           <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-gray-100 dark:bg-white/[0.06] text-gray-600 dark:text-gray-400 text-xs font-medium rounded-md">
-            {entry.data.company}
+            {companyName(entry.data.company, lang)}
           </span>
         )}
         {entry.data.interviewType !== '未知' && (
           <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-gray-100 dark:bg-white/[0.06] text-gray-600 dark:text-gray-400 text-xs font-medium rounded-md">
-            {entry.data.interviewType}
+            {t(`itype.${entry.data.interviewType}` as UIKey)}
           </span>
         )}
         {entry.data.round && (
           <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-gray-100 dark:bg-white/[0.06] text-gray-600 dark:text-gray-400 text-xs font-medium rounded-md">
-            {entry.data.round}
+            {lang === 'zh' ? entry.data.round : t(`round.${entry.data.round}` as UIKey)}
           </span>
         )}
         <span class="text-xs text-gray-400 dark:text-gray-500 ml-auto">
           <time datetime={entry.data.pubDate.toISOString()}>
-            {entry.data.pubDate.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}
+            {entry.data.pubDate.toLocaleDateString(LANG_META[lang].dateLocale, { year: 'numeric', month: 'long', day: 'numeric' })}
           </time>
         </span>
       </div>
@@ -84,7 +86,11 @@ const getPath = (path: string) => {
     </header>
 
     <!-- Article Body -->
+    {!entry.translated && (
+      <p class="mb-8 px-4 py-3 rounded-lg bg-amber-50 dark:bg-amber-900/10 text-sm text-amber-800 dark:text-amber-300">{t('article.untranslated')}</p>
+    )}
     <div
+      data-pagefind-ignore={entry.translated ? undefined : 'all'}
       class="prose prose-gray dark:prose-invert max-w-none
         prose-headings:font-bold prose-headings:text-gray-900 dark:prose-headings:text-white
         prose-h2:text-2xl prose-h2:mt-8 prose-h2:mb-3 prose-h2:pb-3 prose-h2:border-b prose-h2:border-gray-100 dark:prose-h2:border-white/[0.06]
@@ -113,7 +119,7 @@ const getPath = (path: string) => {
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
             </svg>
-            上一篇
+            {t('article.prev')}
           </span>
           <span class="text-sm font-medium text-gray-900 dark:text-white group-hover:text-[#007aff] dark:group-hover:text-[#0a84ff] transition-colors duration-200">
             {prevEntry.data.title}
@@ -126,7 +132,7 @@ const getPath = (path: string) => {
           class="group p-5 rounded-xl border border-gray-200 dark:border-white/[0.06] hover:border-gray-300 dark:hover:border-white/[0.12] hover:shadow-lg transition-all duration-300 text-right cursor-pointer"
         >
           <span class="flex items-center justify-end gap-1.5 text-xs text-gray-400 dark:text-gray-500 mb-2">
-            下一篇
+            {t('article.next')}
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
             </svg>

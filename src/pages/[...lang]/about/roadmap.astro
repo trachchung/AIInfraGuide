@@ -1,0 +1,261 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { langParams, langFromParam, localePath, type Lang } from '../../../i18n/ui';
+
+export const getStaticPaths = () => langParams().map((lang) => ({ params: { lang } }));
+
+const lang = langFromParam(Astro.params.lang);
+const getPath = (path: string) => localePath(lang, path);
+
+const STAR = `<a href="https://github.com/caomaolufei/AIInfraGuide" target="_blank" rel="noopener noreferrer" class="text-[#007aff] dark:text-[#0a84ff] font-medium hover:underline">Star</a>`;
+const ZHIHU = (text: string) => `<a href="https://zhihu.com/people/zi-you-zi-zai-de-zhan-sheng" target="_blank" rel="noopener noreferrer" class="text-emerald-700 dark:text-emerald-400 font-semibold hover:underline">${text}</a>`;
+const WECHAT = (text: string) => `<a href="https://mp.weixin.qq.com/s/oxUBDTd-b1aZnh0jGR5tqw" target="_blank" rel="noopener noreferrer" class="text-emerald-700 dark:text-emerald-400 font-semibold hover:underline">${text}</a>`;
+
+/** [zh, en, vi] for each chapter title */
+type L = [string, string, string];
+const modules: { name: L; color: string; chapters: L[] }[] = [
+  {
+    name: ['模块一：前置知识', 'Module 1: Prerequisites', 'Module 1: Kiến thức nền'],
+    color: '#06B6D4',
+    chapters: [
+      ['第1章 编程语言基础', 'Chapter 1: Programming language basics', 'Chương 1: Nền tảng ngôn ngữ lập trình'],
+      ['第2章 数学基础', 'Chapter 2: Math basics', 'Chương 2: Nền tảng toán học'],
+      ['第3章 Transformer 架构详解', 'Chapter 3: The Transformer architecture in detail', 'Chương 3: Kiến trúc Transformer chi tiết'],
+      ['第4章 PyTorch 框架', 'Chapter 4: PyTorch', 'Chương 4: PyTorch'],
+      ['第5章 GPU 硬件概论', 'Chapter 5: GPU hardware overview', 'Chương 5: Tổng quan phần cứng GPU'],
+      ['第6章 集合通信基础', 'Chapter 6: Collective communication basics', 'Chương 6: Cơ bản về giao tiếp tập thể'],
+    ],
+  },
+  {
+    name: ['模块二：CUDA 编程与算子优化', 'Module 2: CUDA programming and kernel optimization', 'Module 2: Lập trình CUDA và tối ưu kernel'],
+    color: '#F59E0B',
+    chapters: [
+      ['第1章 CUDA 编程入门', 'Chapter 1: Getting started with CUDA', 'Chương 1: Nhập môn CUDA'],
+      ['第2章 CUDA 性能优化基础', 'Chapter 2: CUDA performance basics', 'Chương 2: Cơ bản về tối ưu hiệu năng CUDA'],
+      ['第3章 经典算子实现 - Reduce', 'Chapter 3: Classic kernels - Reduce', 'Chương 3: Kernel kinh điển - Reduce'],
+      ['第4章 经典算子实现 - GEMM', 'Chapter 4: Classic kernels - GEMM', 'Chương 4: Kernel kinh điển - GEMM'],
+      ['第5章 经典算子实现 - Softmax 与算子融合', 'Chapter 5: Classic kernels - Softmax and kernel fusion', 'Chương 5: Kernel kinh điển - Softmax và hợp nhất kernel'],
+      ['第6章 Attention 算子', 'Chapter 6: Attention kernels', 'Chương 6: Kernel Attention'],
+      ['第7章 AI 编译器', 'Chapter 7: AI compilers', 'Chương 7: Trình biên dịch AI'],
+      ['第8章 性能分析工具链', 'Chapter 8: Profiling tools', 'Chương 8: Công cụ phân tích hiệu năng'],
+    ],
+  },
+  {
+    name: ['模块三：分布式训练', 'Module 3: Distributed training', 'Module 3: Huấn luyện phân tán'],
+    color: '#10B981',
+    chapters: [
+      ['第1章 分布式训练总论', 'Chapter 1: Distributed training overview', 'Chương 1: Tổng quan huấn luyện phân tán'],
+      ['第2章 数据并行', 'Chapter 2: Data parallelism', 'Chương 2: Song song dữ liệu'],
+      ['第3章 ZeRO 系列', 'Chapter 3: The ZeRO family', 'Chương 3: Họ ZeRO'],
+      ['第4章 张量并行与序列并行', 'Chapter 4: Tensor and sequence parallelism', 'Chương 4: Song song tensor và song song chuỗi'],
+      ['第5章 流水线并行', 'Chapter 5: Pipeline parallelism', 'Chương 5: Song song pipeline'],
+      ['第6章 3D 并行与混合训练策略', 'Chapter 6: 3D parallelism and hybrid strategies', 'Chương 6: Song song 3D và chiến lược kết hợp'],
+      ['第7章 训练框架实战', 'Chapter 7: Training frameworks in practice', 'Chương 7: Thực hành với framework huấn luyện'],
+    ],
+  },
+  {
+    name: ['模块四：推理优化', 'Module 4: Inference optimization', 'Module 4: Tối ưu suy luận'],
+    color: '#8B5CF6',
+    chapters: [
+      ['第1章 LLM 推理基础', 'Chapter 1: LLM inference basics', 'Chương 1: Cơ bản về suy luận LLM'],
+      ['第2章 推理引擎核心技术', 'Chapter 2: Inference engine internals', 'Chương 2: Kỹ thuật cốt lõi của engine suy luận'],
+      ['第3章 nano-vllm 源码解读', 'Chapter 3: Reading the nano-vllm source', 'Chương 3: Đọc mã nguồn nano-vllm'],
+      ['第4章 量化', 'Chapter 4: Quantization', 'Chương 4: Lượng tử hóa'],
+      ['第5章 Speculative Decoding', 'Chapter 5: Speculative decoding', 'Chương 5: Speculative decoding'],
+      ['第6章 分布式推理与大模型部署', 'Chapter 6: Distributed inference and serving large models', 'Chương 6: Suy luận phân tán và triển khai mô hình lớn'],
+      ['第7章 PD 解耦架构', 'Chapter 7: Prefill/decode disaggregation', 'Chương 7: Kiến trúc tách prefill/decode'],
+      ['第8章 生产级服务特性', 'Chapter 8: Production serving features', 'Chương 8: Tính năng phục vụ cho môi trường production'],
+      ['第9章 性能分析与 Benchmark', 'Chapter 9: Profiling and benchmarking', 'Chương 9: Phân tích hiệu năng và benchmark'],
+      ['第10章 生产部署与运维', 'Chapter 10: Production deployment and operations', 'Chương 10: Triển khai và vận hành production'],
+      ['第11章 推理优化选型与端到端实战', 'Chapter 11: Choosing optimizations and an end-to-end project', 'Chương 11: Lựa chọn kỹ thuật tối ưu và thực hành từ đầu đến cuối'],
+      ['第12章 端侧推理', 'Chapter 12: On-device inference', 'Chương 12: Suy luận trên thiết bị'],
+    ],
+  },
+];
+const idx: Record<Lang, number> = { zh: 0, en: 1, vi: 2 };
+const pick = (l: L) => l[idx[lang]];
+
+const C = {
+  zh: {
+    pageTitle: '教程更新计划 - AIInfraGuide',
+    pageDesc: 'AIInfraGuide 本站教程的更新计划与进度安排',
+    about: '关于',
+    crumb: '教程更新计划',
+    title: '本站教程更新计划',
+    subtitle: '四大模块、29 个章节的系统化更新路线',
+    beforeTitle: '写在前面',
+    before: [
+      '感谢大家对 AIInfraGuide 的关注和支持！作者白天需要上班，只能利用<strong>晚上和周末</strong>的业余时间来编写和更新教程内容。因此更新节奏可能不会特别快，但我会尽量保证每篇文章的质量和深度。',
+      `如果你觉得这个项目对你有帮助，希望能给个 <strong>${STAR} </strong> 鼓励一下，也欢迎分享给身边对 AI Infra 感兴趣的朋友。你们的支持是我持续更新的最大动力！`,
+      '有任何建议或想看的内容，欢迎通过 <strong> GitHub Issue</strong> 或者 <strong> 公众号留言</strong> 告诉我。',
+    ],
+    newsTitle: '获取最新更新',
+    news: `作者新产出的文章都会第一时间在 ${ZHIHU('知乎')} 和 ${WECHAT('公众号《AI Infra Guide》')} 发布，之后才会同步更新到 GitHub 和本站。想第一时间了解最新内容，推荐关注知乎或公众号。`,
+    overviewTitle: '更新计划总览',
+    overview: '本站教程共分为 <strong>4 个模块</strong>，覆盖从前置基础到推理优化的完整 AI Infra 技术栈。以下是各模块的章节规划和更新安排：',
+    chapters: '{n} 章',
+    paceTitle: '更新节奏',
+    pace: [
+      '<strong>更新频率</strong>：预计每周 1-2 篇，视内容深度和工作强度调整',
+      '<strong>更新顺序</strong>：按模块顺序推进，优先完成前置知识和 CUDA 编程模块',
+      '<strong>内容质量</strong>：每篇文章遵循「先白话后术语」的原则，配合代码示例和图解',
+      '<strong>反馈驱动</strong>：如果某个章节呼声较高，会考虑优先更新',
+    ],
+    back: '草帽路飞介绍',
+  },
+  en: {
+    pageTitle: 'Tutorial roadmap - AIInfraGuide',
+    pageDesc: 'The update plan and schedule for the AIInfraGuide tutorials',
+    about: 'About',
+    crumb: 'Tutorial roadmap',
+    title: 'Tutorial roadmap',
+    subtitle: 'The update plan for four modules and 29 chapters',
+    beforeTitle: 'A note first',
+    before: [
+      'Thanks for following AIInfraGuide. I have a day job, so I write and update the tutorials on <strong>evenings and weekends</strong>. Updates will not be fast, but I try to make every article thorough and correct.',
+      `If the project helps you, a <strong>${STAR}</strong> on GitHub is appreciated, and so is sharing it with friends who are interested in AI Infra. That support is what keeps me writing.`,
+      'If you have suggestions or topics you want covered, tell me through a <strong>GitHub issue</strong> or a <strong>comment on the WeChat account</strong>.',
+    ],
+    newsTitle: 'Getting the latest articles',
+    news: `New articles go out first on ${ZHIHU('Zhihu')} and the ${WECHAT('WeChat account "AI Infra Guide"')}, and reach GitHub and this site afterwards. Follow one of those if you want to read them as soon as they are published. Both are in Chinese.`,
+    overviewTitle: 'Plan overview',
+    overview: 'The tutorials are split into <strong>4 modules</strong> that cover the AI Infra stack from the prerequisites to inference optimization. Here are the planned chapters for each module:',
+    chapters: '{n} chapters',
+    paceTitle: 'Update schedule',
+    pace: [
+      '<strong>How often:</strong> about one or two articles a week, depending on the topic and how busy work is',
+      '<strong>Order:</strong> module by module, starting with the prerequisites and CUDA modules',
+      '<strong>Style:</strong> every article explains the idea in plain words before the terminology, with code examples and diagrams',
+      '<strong>Feedback:</strong> chapters that many readers ask for may be moved up',
+    ],
+    back: 'About Caomaolufei',
+  },
+  vi: {
+    pageTitle: 'Kế hoạch cập nhật - AIInfraGuide',
+    pageDesc: 'Kế hoạch và lịch cập nhật các bài hướng dẫn của AIInfraGuide',
+    about: 'Giới thiệu',
+    crumb: 'Kế hoạch cập nhật',
+    title: 'Kế hoạch cập nhật bài hướng dẫn',
+    subtitle: 'Lộ trình cập nhật cho 4 module và 29 chương',
+    beforeTitle: 'Đôi lời trước',
+    before: [
+      'Cảm ơn bạn đã quan tâm đến AIInfraGuide. Ban ngày tôi đi làm nên chỉ viết và cập nhật bài vào <strong>buổi tối và cuối tuần</strong>. Tốc độ cập nhật sẽ không nhanh, nhưng tôi cố gắng để mỗi bài đều kỹ và chính xác.',
+      `Nếu dự án có ích cho bạn, hãy tặng một <strong>${STAR}</strong> trên GitHub và chia sẻ cho bạn bè quan tâm đến AI Infra. Sự ủng hộ đó giúp tôi tiếp tục viết.`,
+      'Nếu có góp ý hoặc chủ đề muốn đọc, hãy báo cho tôi qua <strong>GitHub issue</strong> hoặc <strong>bình luận trên tài khoản WeChat</strong>.',
+    ],
+    newsTitle: 'Theo dõi bài mới',
+    news: `Bài mới được đăng trước trên ${ZHIHU('Zhihu')} và ${WECHAT('tài khoản WeChat "AI Infra Guide"')}, sau đó mới lên GitHub và trang này. Nếu muốn đọc sớm nhất, hãy theo dõi một trong hai kênh đó. Cả hai đều bằng tiếng Trung.`,
+    overviewTitle: 'Tổng quan kế hoạch',
+    overview: 'Các bài hướng dẫn chia thành <strong>4 module</strong>, bao quát AI Infra từ kiến thức nền đến tối ưu suy luận. Dưới đây là các chương dự kiến của từng module:',
+    chapters: '{n} chương',
+    paceTitle: 'Nhịp cập nhật',
+    pace: [
+      '<strong>Tần suất:</strong> khoảng 1 đến 2 bài mỗi tuần, tùy độ khó của chủ đề và khối lượng công việc',
+      '<strong>Thứ tự:</strong> lần lượt theo module, ưu tiên module kiến thức nền và CUDA',
+      '<strong>Cách viết:</strong> mỗi bài giải thích ý tưởng bằng lời dễ hiểu trước rồi mới đến thuật ngữ, kèm ví dụ mã và hình minh họa',
+      '<strong>Phản hồi:</strong> chương nào được nhiều người yêu cầu có thể được ưu tiên',
+    ],
+    back: 'Về Caomaolufei',
+  },
+}[lang];
+---
+
+<Layout title={C.pageTitle} description={C.pageDesc}>
+  <article class="py-24 max-w-3xl mx-auto px-6">
+    <!-- Breadcrumb -->
+    <nav class="mb-8 text-sm text-gray-400 dark:text-gray-500">
+      <a href={getPath('/about')} class="hover:text-[#007aff] dark:hover:text-[#0a84ff] transition-colors">{C.about}</a>
+      <span class="mx-2">/</span>
+      <span class="text-gray-600 dark:text-gray-300">{C.crumb}</span>
+    </nav>
+
+    <div class="mb-12 text-center">
+      <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 leading-tight text-gray-900 dark:text-white">
+        {C.title}
+      </h1>
+      <p class="text-lg text-gray-500 dark:text-gray-400">{C.subtitle}</p>
+    </div>
+
+    <div
+      class="prose prose-gray dark:prose-invert prose-lg max-w-none
+        prose-headings:font-bold prose-headings:text-gray-900 dark:prose-headings:text-white
+        prose-h2:text-2xl prose-h2:mt-12 prose-h2:border-b prose-h2:border-gray-200 dark:prose-h2:border-white/10 prose-h2:pb-2
+        prose-h3:text-xl
+        prose-a:text-[#007aff] dark:prose-a:text-[#0a84ff] prose-a:no-underline hover:prose-a:underline
+        prose-hr:border-gray-200 dark:prose-hr:border-white/10"
+    >
+      <!-- 写在前面 -->
+      <div class="not-prose mb-10 p-6 rounded-xl bg-blue-50/80 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-800/20">
+        <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+          <svg class="w-5 h-5 text-[#007aff] dark:text-[#0a84ff]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+          </svg>
+          {C.beforeTitle}
+        </h2>
+        {C.before.map((html, i) => (
+          <p class:list={['text-[15px] text-gray-600 dark:text-gray-300 leading-relaxed', i < C.before.length - 1 && 'mb-3']} set:html={html} />
+        ))}
+      </div>
+
+      <!-- 最新动态 -->
+      <div class="not-prose mb-10 p-6 rounded-xl bg-emerald-50/80 dark:bg-emerald-900/10 border border-emerald-100 dark:border-emerald-800/20">
+        <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+          <svg class="w-5 h-5 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 0 1-2.25 2.25M16.5 7.5V18a2.25 2.25 0 0 0 2.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 0 0 2.25 2.25h13.5M6 7.5h3v3H6V7.5Z" />
+          </svg>
+          {C.newsTitle}
+        </h2>
+        <p class="text-[15px] text-gray-600 dark:text-gray-300 leading-relaxed" set:html={C.news} />
+      </div>
+
+      <h2>{C.overviewTitle}</h2>
+      <p set:html={C.overview} />
+    </div>
+
+    <!-- Module Cards -->
+    <div class="mt-8 space-y-6">
+      {modules.map((mod, i) => (
+        <div class="rounded-xl border border-gray-200 dark:border-white/[0.06] overflow-hidden">
+          <div class="px-6 py-4 flex items-center gap-3" style={`background: ${mod.color}10;`}>
+            <div class="w-2 h-2 rounded-full shrink-0" style={`background: ${mod.color};`} />
+            <h3 class="font-semibold text-gray-900 dark:text-white text-[15px]">{pick(mod.name)}</h3>
+            <span class="ml-auto text-xs text-gray-400 dark:text-gray-500 font-medium tabular-nums">{C.chapters.replace('{n}', String(mod.chapters.length))}</span>
+          </div>
+          <ul class="divide-y divide-gray-100 dark:divide-white/[0.04]">
+            {mod.chapters.map((ch, j) => (
+              <li class="px-6 py-3 flex items-center gap-3 text-sm">
+                <span class="w-5 h-5 rounded-md flex items-center justify-center text-[11px] font-semibold shrink-0" style={`background: ${mod.color}15; color: ${mod.color};`}>
+                  {j + 1}
+                </span>
+                <span class="text-gray-700 dark:text-gray-300">{pick(ch)}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+
+    <!-- 更新节奏 -->
+    <div class="mt-12 prose prose-gray dark:prose-invert prose-lg max-w-none
+      prose-headings:font-bold prose-headings:text-gray-900 dark:prose-headings:text-white
+      prose-h2:text-2xl prose-h2:mt-12 prose-h2:border-b prose-h2:border-gray-200 dark:prose-h2:border-white/10 prose-h2:pb-2">
+      <h2>{C.paceTitle}</h2>
+      <ul>
+        {C.pace.map((html) => <li set:html={html} />)}
+      </ul>
+    </div>
+
+    <!-- Navigation -->
+    <div class="mt-16 pt-8 border-t border-gray-200 dark:border-white/[0.06] flex justify-start">
+      <a
+        href={getPath('/about')}
+        class="group flex items-center gap-2 text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-[#007aff] dark:hover:text-[#0a84ff] transition-colors"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+        </svg>
+        {C.back}
+      </a>
+    </div>
+  </article>
+</Layout>
