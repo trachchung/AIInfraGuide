@@ -64,6 +64,9 @@ jobs:
         run: |
           set -euo pipefail
           npm i -g wrangler@4
+          # Create once; ignore "already exists" on later runs.
+          wrangler pages project create infra-guide --production-branch=main \
+            || true
           wrangler pages deploy dist \
             --project-name=infra-guide \
             --branch=main \
